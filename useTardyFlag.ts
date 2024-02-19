@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export type UseTardyTimeoutKey  = 'setToVisible' |
+export type UseTardyTimeoutKey = 'setToVisible' |
     'minVisible' |
     'unsetToInvisible' |
     'minInvisible'
@@ -54,7 +54,7 @@ export type UseTardyFlagResult = {
     debugResults: () => UseTardyFlagDebugResults;
 }
 
-export default function useTardyFlag(props: UseTardyFlagProps): [result:UseTardyFlagResult, set:(value:boolean) => void] {
+export default function useTardyFlag(props: UseTardyFlagProps): [result: UseTardyFlagResult, set: (value: boolean) => void] {
     const [flag, setFlag] = useState<boolean>(props.initialValue);
     const data = useRef<InternData | null>(null)
 
@@ -74,115 +74,115 @@ export default function useTardyFlag(props: UseTardyFlagProps): [result:UseTardy
         return data.current;
     }
 
-    const onTimeout = (key: UseTardyTimeoutKey) => () => {
-        const data = getData();
-        // console.log('onTimeout(', key, ') in state', data.state)
-        // data.timeouts.delete(key);
-        delete data.timeouts[key]
-
-        switch (data.state) {
-            case 'set short invisible long':
-                switch (key) {
-                    case 'setToVisible':
-                        setMyTimeout('minVisible');
-                        setFlag(true);
-                        data.state = 'visible short';
-                        setInternState(data.state);
-                        break;
-                }
-                break;
-
-            case 'visible short':
-                switch (key) {
-                    case 'minVisible':
-                        // console.log('entering visible long')
-                        data.state = 'visible long';
-                        setInternState(data.state);
-                        break;
-                }
-                break;
-
-            case 'unset short visible short':
-                switch (key) {
-                    case 'minVisible':
-                        data.state = 'unset short visible long';
-                        setInternState(data.state);
-                        break;
-
-                    case 'unsetToInvisible':
-                        data.state = 'unset long visible short';
-                        setInternState(data.state);
-                        break;
-                }
-                break;
-
-            case 'unset short visible long':
-                switch (key) {
-                    case 'unsetToInvisible':
-                        setMyTimeout('minInvisible');
-                        setFlag(false);
-                        data.state = 'invisible short';
-                        setInternState(data.state);
-                        break;
-                }
-                break;
-
-            case 'unset long visible short':
-                switch (key) {
-                    case 'minVisible':
-                        setMyTimeout('minInvisible');
-                        setFlag(false);
-                        data.state = 'invisible short';
-                        setInternState(data.state);
-                        break;
-                }
-                break;
-
-            case 'invisible short':
-                switch (key) {
-                    case 'minInvisible':
-                        data.state = 'invisible long';
-                        setInternState(data.state);
-                        break;
-                }
-                break;
-
-            case 'set short invisible short':
-                switch (key) {
-                    case 'minInvisible':
-                        data.state = 'set short invisible long';
-                        setInternState(data.state);
-                        break;
-                    case 'setToVisible':
-                        data.state = 'set long invisible short';
-                        setInternState(data.state);
-                        break;
-                }
-                break;
-
-            case 'set long invisible short':
-                switch (key) {
-                    case 'minInvisible':
-                        setMyTimeout('minVisible');
-                        data.state = 'visible short';
-                        setFlag(true);
-                        setInternState(data.state);
-                        break;
-                }
-                break;
-
+    const setMyTimeout = useCallback((key: UseTardyTimeoutKey): void => {
+        const onTimeout = (key: UseTardyTimeoutKey) => () => {
+            const data = getData();
+            // console.log('onTimeout(', key, ') in state', data.state)
+            // data.timeouts.delete(key);
+            delete data.timeouts[key]
+    
+            switch (data.state) {
+                case 'set short invisible long':
+                    switch (key) {
+                        case 'setToVisible':
+                            setMyTimeout('minVisible');
+                            setFlag(true);
+                            data.state = 'visible short';
+                            setInternState(data.state);
+                            break;
+                    }
+                    break;
+    
+                case 'visible short':
+                    switch (key) {
+                        case 'minVisible':
+                            // console.log('entering visible long')
+                            data.state = 'visible long';
+                            setInternState(data.state);
+                            break;
+                    }
+                    break;
+    
+                case 'unset short visible short':
+                    switch (key) {
+                        case 'minVisible':
+                            data.state = 'unset short visible long';
+                            setInternState(data.state);
+                            break;
+    
+                        case 'unsetToInvisible':
+                            data.state = 'unset long visible short';
+                            setInternState(data.state);
+                            break;
+                    }
+                    break;
+    
+                case 'unset short visible long':
+                    switch (key) {
+                        case 'unsetToInvisible':
+                            setMyTimeout('minInvisible');
+                            setFlag(false);
+                            data.state = 'invisible short';
+                            setInternState(data.state);
+                            break;
+                    }
+                    break;
+    
+                case 'unset long visible short':
+                    switch (key) {
+                        case 'minVisible':
+                            setMyTimeout('minInvisible');
+                            setFlag(false);
+                            data.state = 'invisible short';
+                            setInternState(data.state);
+                            break;
+                    }
+                    break;
+    
+                case 'invisible short':
+                    switch (key) {
+                        case 'minInvisible':
+                            data.state = 'invisible long';
+                            setInternState(data.state);
+                            break;
+                    }
+                    break;
+    
+                case 'set short invisible short':
+                    switch (key) {
+                        case 'minInvisible':
+                            data.state = 'set short invisible long';
+                            setInternState(data.state);
+                            break;
+                        case 'setToVisible':
+                            data.state = 'set long invisible short';
+                            setInternState(data.state);
+                            break;
+                    }
+                    break;
+    
+                case 'set long invisible short':
+                    switch (key) {
+                        case 'minInvisible':
+                            setMyTimeout('minVisible');
+                            data.state = 'visible short';
+                            setFlag(true);
+                            setInternState(data.state);
+                            break;
+                    }
+                    break;
+    
+            }
         }
-    }
-
-
-    function setMyTimeout(key: UseTardyTimeoutKey): void {
+    
         const data = getData();
         // data.timeouts.set(key, setTimeout(onTimeout(key), props.timeoutDelays.get(key)));
         data.timeouts[key] = setTimeout(onTimeout(key), props.timeoutDelays[key])
         // console.log('Did set timeout for key ', key);
-    }
+    }, [props.timeoutDelays])
 
-    function clearMyTimeout(key: UseTardyTimeoutKey): void {
+
+    const clearMyTimeout = useCallback((key: UseTardyTimeoutKey): void => {
         const data = getData();
         // const to = data.timeouts.get(key);
         const to = data.timeouts[key];
@@ -193,15 +193,16 @@ export default function useTardyFlag(props: UseTardyFlagProps): [result:UseTardy
         } else {
             throw new Error('to was null');
         }
-    }
+    }, [])
 
-    function jBackToVisibleShort(data: InternData) {
-        clearMyTimeout('unsetToInvisible');
-        data.state = 'visible short';
-        setInternState(data.state);
-    }
+    const set = useCallback((flag: boolean) => {
 
-    function set(flag: boolean) {
+        function jBackToVisibleShort(data: InternData) {
+            clearMyTimeout('unsetToInvisible');
+            data.state = 'visible short';
+            setInternState(data.state);
+        }
+    
         const data = getData();
         switch (data.state) {
             case 'invisible long':
@@ -273,19 +274,21 @@ export default function useTardyFlag(props: UseTardyFlagProps): [result:UseTardy
                 }
                 break;
         }
-    }    
+    }, [setMyTimeout, clearMyTimeout])
+    const debugResults = useCallback(() => {
+        // console.log('debugResults()', internState.current);
+
+        return {
+            internState: internState.current,
+        }
+    }, [])
+
     return [
         {
-        value: flag,
-        debugResults: () => {
-            // console.log('debugResults()', internState.current);
-
-            return {
-                internState: internState.current,
-            }
+            value: flag,
+            debugResults,
+            set
         },
         set
-    },
-    set
-]
+    ]
 }
