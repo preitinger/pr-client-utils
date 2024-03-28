@@ -54,9 +54,12 @@ export type UseTardyFlagResult = {
     debugResults: () => UseTardyFlagDebugResults;
 }
 
-export default function useTardyFlag(props: UseTardyFlagProps): [result: UseTardyFlagResult, set: (value: boolean) => void] {
+export default function useTardyFlag(props1: UseTardyFlagProps): [result: UseTardyFlagResult, set: (value: boolean) => void] {
+    const [props, setProps] = useState<UseTardyFlagProps>(props1);
     const [flag, setFlag] = useState<boolean>(props.initialValue);
     const data = useRef<InternData | null>(null)
+
+    console.log('render useTardyFlag for props', props);
 
     // const [internState, setInternState] = useState<string>('<unknown>');
     const internState = useRef<string>(getData().state);
