@@ -13,10 +13,10 @@ export default function chainedAbortController(signal: AbortSignal): [abortContr
     signal.addEventListener('abort', abortListener, {
         once: true
     })
-    console.log('abort listener added in chainedAbortController()')
+    // console.log('abort listener added in chainedAbortController()')
 
     return [abort, () => {
         signal.removeEventListener('abort', abortListener)
-        console.log('abort listener removed in relase of chainedAbortController');
+        // console.log('abort listener removed in relase of chainedAbortController');
     }];
 }
