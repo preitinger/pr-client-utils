@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export type UseTardyTimeoutKey = 'setToVisible' |
     'minVisible' |
@@ -27,7 +27,7 @@ type InternState = 'invisible long' |
     'set short invisible short' |
     'set long invisible short';
 
-type TimeoutMap = Map<UseTardyTimeoutKey, NodeJS.Timeout>;
+// type TimeoutMap = Map<UseTardyTimeoutKey, NodeJS.Timeout>;
 
 type InternData = {
     state: InternState;
@@ -55,7 +55,7 @@ export type UseTardyFlagResult = {
 }
 
 export default function useTardyFlag(props1: UseTardyFlagProps): [result: UseTardyFlagResult, set: (value: boolean) => void] {
-    const [props, setProps] = useState<UseTardyFlagProps>(props1);
+    const [props, /* setProps */] = useState<UseTardyFlagProps>(props1);
     const [flag, setFlag] = useState<boolean>(props.initialValue);
     const data = useRef<InternData | null>(null)
 
