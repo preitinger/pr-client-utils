@@ -1,6 +1,5 @@
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import useTardyFlag, { UseTardyFlagProps, UseTardyFlagResult } from "./useTardyFlag";
-import { act } from "react-dom/test-utils";
 
 jest.useFakeTimers();
 
@@ -301,7 +300,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
         }
 
         test('helper function state', async () => {
-            const t = 10;
+            // const t = 10;
             const setToVisible = 10;
             const d1 = 5;
             const minVisible = 100;
@@ -374,9 +373,9 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     const st = () => {
                         return tardyFlag.result.current[0];
                     }
-                    const set = () => {
-                        return tardyFlag.result.current[1];
-                    }
+                    // const set = () => {
+                    //     return tardyFlag.result.current[1];
+                    // }
                     await act(async () => {
                         await state(props, st(), destState)
                     })
@@ -386,7 +385,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
         })
 
         test('invisible long -> set short invisible long', async () => {
-            const t = 10;
+            // const t = 10;
             const setToVisible = 10;
             const d1 = 5;
             const minVisible = 100;
@@ -430,7 +429,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
         })
 
         test('set short invisible long -> visible short', async () => {
-            const t = 10;
+            // const t = 10;
             const setToVisible = 10;
             const d1 = 5;
             const minVisible = 100;
@@ -474,7 +473,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
         })
 
         test('set short invisible long -> invisible long', async () => {
-            const t = 10;
+            // const t = 10;
             const setToVisible = 10;
             const d1 = 5;
             const minVisible = 100;
@@ -514,9 +513,12 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
             const st = () => {
                 return tardyFlag.result.current[0];
             }
-            const set = () => {
-                return tardyFlag.result.current[1];
-            }
+            // const set = () => {
+            //     return tardyFlag.result.current[1];
+            // }
+            act(() => {
+
+            })
             await act(async () => {
                 await state(props, st(), sourceState);
             });
@@ -600,7 +602,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     minInvisible: 100
                 }
             }, 'unset short visible short',
-                async (result) => {
+                async (/* result */) => {
                     await jest.advanceTimersByTimeAsync(100)
                 }, 'unset short visible long', true)
         })
@@ -615,7 +617,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     minInvisible: 100
                 }
             }, 'unset short visible short',
-                async (result) => {
+                async (/* result */) => {
                     await jest.advanceTimersByTimeAsync(100)
                 }, 'unset long visible short', true)
         })
@@ -660,7 +662,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     minInvisible: 100
                 }
             }, 'unset short visible long',
-                async (result) => {
+                async (/* result */) => {
                     await jest.advanceTimersByTimeAsync(90);
                 }, 'invisible short', false)
         })
@@ -675,7 +677,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     minInvisible: 100
                 }
             }, 'unset long visible short',
-                async (result) => {
+                async (/* result */) => {
                     await jest.advanceTimersByTimeAsync(101 - 90);
                 }, 'invisible short', false)
         })
@@ -720,7 +722,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     minInvisible: 100
                 }
             }, 'invisible short',
-                async (result) => {
+                async (/* result */) => {
                     await jest.advanceTimersByTimeAsync(100);
                 }, 'invisible long', false)
         })
@@ -735,7 +737,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     minInvisible: 100
                 }
             }, 'set short invisible short',
-                async (result) => {
+                async (/* result */) => {
                     await jest.advanceTimersByTimeAsync(100);
                 }, 'set short invisible long', false)
         })
@@ -750,7 +752,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     minInvisible: 101
                 }
             }, 'set short invisible short',
-                async (result) => {
+                async (/* result */) => {
                     await jest.advanceTimersByTimeAsync(99);
                 }, 'set long invisible short', false)
         })
@@ -764,7 +766,7 @@ describe('useTardyFlag filters the state of a flag according to some delays in m
                     minInvisible: 110
                 }
             }, 'set long invisible short',
-                async (result) => {
+                async (/* result */) => {
                     await jest.advanceTimersByTimeAsync(110 - 100);
                 }, 'visible short', true)
         })
